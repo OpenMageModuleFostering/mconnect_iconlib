@@ -1,0 +1,16 @@
+{
+    "name": "OpenMageModuleFostering/Mconnect_Iconlib",
+    "type": "magento-module",
+    "license": "*-GNU-General-Public-License-(GPL)",
+    "homepage": "",
+    "description": "Mconnect Iconlib",
+    "authors": [
+    {
+        "name": "M-Connect Solutions",
+        "email": "darshit@mconnectsolutions.com"
+    }
+],
+    "suggest": {
+        "magento-hackathon/magento-composer-installer": "*"
+    }
+}

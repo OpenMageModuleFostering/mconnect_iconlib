@@ -1,0 +1,112 @@
+<?php
+  /**
+ * M-Connect Solutions.
+ *
+ * NOTICE OF LICENSE
+ *
+
+ * It is also available through the world-wide-web at this URL:
+ * http://www.mconnectsolutions.com/lab/
+ *
+ * @category   M-Connect
+ * @package    M-Connect
+ * @copyright  Copyright (c) 2009-2010 M-Connect Solutions. (http://www.mconnectsolutions.com)
+ */ 
+?>
+<?php
+    $iconDataCollection = Mage::getModel('iconlib/iconlib')->getCollection()
+    ->addFieldToFilter('main_table.status','1')->getData();            
+    $iconCnt = 1;    
+?>
+<script type="text/javascript">
+function Select_DeSelect_Icon(targetId,shadowColor)
+{
+    var targetChkObj = document.getElementById('iconChkId'+targetId);
+    var targetImgObj = document.getElementById('iconImgId'+targetId);
+    if(targetChkObj.checked == false)
+    {
+      targetChkObj.checked = true;
+      var styleString = 'box-shadow: 3px 3px 6px #'+shadowColor+'; -webkit-box-shadow: 3px 3px 6px #'+shadowColor+'; -moz-box-shadow: 3px 3px 6px #'+shadowColor+';';
+      targetChkObj.style.cssText = styleString;
+      targetImgObj.style.cssText = 'border:1px solid #000; width:100px; margin: 5px 0px 4px 0px; '+styleString;
+    }
+    else
+    {
+      targetChkObj.checked = false;          
+      targetChkObj.style.cssText = '';
+      targetImgObj.style.cssText = 'border:1px solid #000; width:100px; margin: 5px 0px 4px 0px;';
+    }
+}
+</script>
+<!--<div id="loadingmask" style="display: none;">
+<div class="loader" id="loading-mask-loader"><img src="<?php //echo str_replace("index.php/","",$this->getUrl()) ?>skin/adminhtml/default/default/images/ajax-loader-tr.gif" alt="<?php //echo $this->__('Loading...') ?>"/><?php //echo $this->__('Loading...') ?></div>
+<div id="loading-mask"></div>
+</div>-->
+<div class="entry-edit">
+    <div class="entry-edit-head">
+        <h4 class="icon-head head-edit-form fieldset-legend">Associate Product to Icon Library.</h4>
+    </div>
+    <div id="group_fields4" class="fieldset fieldset-wide">
+        <div class="hor-scroll">
+            <table cellspacing="0" class="form-list">
+                <tbody>
+                    <tr>
+                        <td>                                                                    
+                            <div class="grid">
+                                <div class="hor-scroll">
+                                    <table cellspacing="0" class="data">            
+                                        <tbody>
+                                        <tr class="even pointer">
+                                        <?php 
+                                        foreach($iconDataCollection as $iconData):
+                                        $relationModel = Mage::getModel('iconlibtoproducts/iconlibtoproducts');
+                                        $relationModelCollection = $relationModel->getCollection()
+                                                ->addFieldToFilter('iconid',$iconData['iconlib_id'])
+                                                ->addFieldToFilter('productid',Mage::registry('product')->getId());
+                                        
+                                        $mcsiconlib_prev_stat = ''; 
+                                        $checked = '';
+                                        $borderStyle = '';
+                                        $shadowColorCode = '888';
+                                        if($relationModelCollection->count() > 0)
+                                        {
+                                            $mcsiconlib_prev_stat = $iconData['iconlib_id'];
+                                            $checked = ' checked="checked"';
+                                            $shadowColorCode = '624A09';                                            
+                                            $borderStyle = 'box-shadow: -3px -3px 6px #'.$shadowColorCode.'; -webkit-box-shadow: -3px -3px 6px #'.$shadowColorCode.'; -moz-box-shadow: -3px -3px 6px #'.$shadowColorCode.';';
+                                            
+                                        }?>
+                                        <td class="a-center"><input type="checkbox" id="iconChkId<?php echo $iconData['iconlib_id']; ?>" class="massaction-checkbox" value="<?php echo $iconData['iconlib_id']; ?>" name="mcsiconlibarr[]"<?php echo $checked; ?> style="<?php echo $borderStyle; ?>" />
+                                        <?php if($mcsiconlib_prev_stat != ''){?>
+                                        <input type="hidden" name="mcsiconlib_prev_stat_arr[]" value="<?php echo $mcsiconlib_prev_stat; ?>" id="mcsiconlib_prev_stat<?php echo $mcsiconlib_prev_stat; ?>" />
+                                        <?php }
+                                        if(file_exists(Mage::getBaseDir('media').'/admin_mconnect_iconlib_uploads/'.$iconData['iconlib_id'].'/'.$iconData['iconfilename'])){
+                                            $iconUrl = $iconData['icon'];
+                                        } else {
+                                           $iconUrl = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA) . 'admin_mconnect_iconlib_uploads/PlaceHolder/ImageNotAvailable.jpg';                                           
+                                        }
+                                        ?>
+                                        </td>
+                                        <td class="a-center"><img style="width:100px; margin: 5px 0px 4px 0px; border:1px solid #000; <?php echo $borderStyle; ?>" class="grid-image" src="<?php echo $iconUrl; ?>" id="iconImgId<?php echo $iconData['iconlib_id']; ?>" title="Label: <?php echo $iconData['iconlabel']; ?> || Image Name: <?php echo $iconData['iconfilename']; ?>" onclick="Select_DeSelect_Icon('<?php echo $iconData['iconlib_id']; ?>','<?php echo $shadowColorCode; ?>');" />
+                                        <br />
+                                        <span><strong><i><?php echo $iconData['iconlabel']; ?></i></strong></span>
+                                        </td>
+                                        <?php if(($iconCnt%4) == 0 || $iconCnt == 0){?>
+                                        </tr><tr class="even pointer">
+                                        <?php }?>     
+                                        <?php $iconCnt++; endforeach; ?>                                        
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                        
+                           
+                        </td>
+                    </tr>
+    
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
